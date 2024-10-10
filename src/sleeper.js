@@ -9,10 +9,10 @@ export const getLeagueMatchups = async (leagueId, week) => {
 
     try {
         const response = await client.get(uri);
-        console.log(response.data);
+        return response.data;
     }
-    catch {
-        console.log("Failed to get league scores");
+    catch(e) {
+        console.log("Failed to get league scores", e);
     }
 }
 
@@ -21,9 +21,21 @@ export const getLeagueUsers = async (leagueId) => {
 
     try {
         const response = await client.get(uri);
-        console.log(response.data);
+        return response.data;
+    }
+    catch(e) {
+        console.log("Failed to get league users", e);
+    }
+}
+
+export const getRosters = async (leagueId) => {
+    const uri =`league/${leagueId}/rosters`;
+
+    try {
+        const response = await client.get(uri);
+        return response.data;
     }
     catch {
-        console.log("Failed to get league users");
+        console.log("Failed to get rosters", e);
     }
 }
