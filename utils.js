@@ -1,4 +1,5 @@
 import { getLeagueMatchups } from "./sleeper.js";
+import TextToSVG from "text-to-svg";
 
 export const calcPayout = (wins) => {
     const payout = 25;
@@ -15,3 +16,18 @@ export const getAndSortPtsAscMatchupForWeek = async (leagueId,week) => {
 
     return matchupForWeek;
 };
+
+export const generateSVG = (text) => {
+    const textToSVG = TextToSVG.loadSync("fonts/Tomorrow/Tomorrow-Medium.ttf");
+	try {
+		const svg = textToSVG.getSVG(text, {
+			fontSize: 30,
+			anchor: 'top',
+			attributes: { fill: 'white' },
+		})
+		return Buffer.from(svg)
+	} catch (err) {
+		console.error('Error generating SVG:', err)
+		throw err
+	}
+}

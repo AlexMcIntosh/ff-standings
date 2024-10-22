@@ -1,5 +1,6 @@
 import { getLeagueUsers, getRosters } from "./sleeper.js";
 import { getAndSortPtsAscMatchupForWeek } from "./utils.js";
+import { generateStandingsPng } from "./image-processor.js";
 import { calcPayout } from "./utils.js";
 import Yargs from "yargs";
 import { hideBin } from "yargs/helpers";
@@ -7,16 +8,8 @@ import { hideBin } from "yargs/helpers";
 const argv = Yargs(hideBin(process.argv)).parse()
 const LEAGUE_ID = "1124850847474282496";
 
-if (!argv.week) {
-    console.log("Missing argument --week");
-}
-else {
-    await main(argv.week);
-}
-
 async function main(week) {
     const currWeek = week;
-
     const users = await getLeagueUsers(LEAGUE_ID);
     const rosters = await getRosters(LEAGUE_ID);
 
@@ -27,6 +20,7 @@ async function main(week) {
         userMap.set(user.user_id, { "display_name": user.display_name })
     });
     
+    // Map users to rosters
     rosters.forEach((roster) => {
         // delete the co_owners
         if (roster.co_owners) {
@@ -37,7 +31,7 @@ async function main(week) {
             })
         }
     
-        // roster may be a co owner roster but we dont want to populate the map with them
+        // roster may be a co owner roster but we dont want to include them in standings
         if (userMap.has(roster.owner_id)) {
             const user = userMap.get(roster.owner_id);
             const { wins, losses } = roster.settings;
@@ -52,6 +46,7 @@ async function main(week) {
         }
     });
     
+    // get matchups and calculate highest scorers for each week
     for(let i = 1; i <= currWeek; i++) {
         const sortedMatchups = await getAndSortPtsAscMatchupForWeek(LEAGUE_ID, i);
         sortedMatchups.forEach((matchup, index) => {
@@ -66,16 +61,28 @@ async function main(week) {
         });
     }
     
-    const finalStandings = [];
+    // Determine standings ordered descening by points
+    const weeklyStandings = [];
     rosterMap.forEach((roster) => {
-        finalStandings.push(roster);
+        weeklyStandings.push(roster);
     });
     
-    finalStandings.sort((a, b) => {
+    weeklyStandings.sort((a, b) => {
         return b.points - a.points;
     });
     
-    finalStandings.forEach((team) => {
-        console.log(team);
-    });
+    try {
+        await generateStandingsPng(weeklyStandings, week);
+        console.log("Weekly standings image created");
+    }
+    catch (e) {
+        console.log("Failed to generate image", e);
+    }
 };
+
+if (!argv.week) {
+    console.log("Missing argument --week");
+}
+else {
+    await main(argv.week);
+}
