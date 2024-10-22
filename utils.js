@@ -17,11 +17,11 @@ export const getAndSortPtsAscMatchupForWeek = async (leagueId,week) => {
     return matchupForWeek;
 };
 
-export const generateSVG = (text) => {
+export const generateSVG = (text, fontSize = 30) => {
     const textToSVG = TextToSVG.loadSync("fonts/Tomorrow/Tomorrow-Medium.ttf");
 	try {
 		const svg = textToSVG.getSVG(text, {
-			fontSize: 30,
+			fontSize,
 			anchor: 'top',
 			attributes: { fill: 'white' },
 		})
