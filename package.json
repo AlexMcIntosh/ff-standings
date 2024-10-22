@@ -2,6 +2,9 @@
   "name": "ff-standings-png",
   "type": "module",
   "dependencies": {
-    "axios": "^1.7.7"
+    "axios": "^1.7.7",
+    "sharp": "^0.33.5",
+    "text-to-svg": "^3.1.5",
+    "yargs": "^17.7.2"
   }
 }
