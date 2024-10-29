@@ -68,6 +68,7 @@ async function main(week) {
     });
     
     weeklyStandings.sort((a, b) => {
+        if (b.points == a.points) return b.wins - a.wins;
         return b.points - a.points;
     });
     
