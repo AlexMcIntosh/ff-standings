@@ -58,7 +58,7 @@ export const generateStandingsPng = async (standings, week) => {
         const weekOverlay = {
             input: weekSvg,
             top: 215,
-            left: 905
+            left: 900
         }
 
         overlays.push(nameOverlay);
