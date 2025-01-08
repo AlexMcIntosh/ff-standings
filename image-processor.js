@@ -40,13 +40,13 @@ export const generateStandingsPng = async (standings, week) => {
         const lossesOverlay = {
             input: lossesSvg,
             top: y,
-            left: 737,
+            left: 730,
         };
 
         const payoutOverlay = {
             input: payoutSvg,
             top: y,
-            left: 813,
+            left: 810,
         };
 
         const pointsOverlay = {
@@ -58,7 +58,7 @@ export const generateStandingsPng = async (standings, week) => {
         const weekOverlay = {
             input: weekSvg,
             top: 215,
-            left: 900
+            left: 843
         }
 
         overlays.push(nameOverlay);
