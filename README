@@ -1,0 +1,7 @@
+# Overview
+This program is built for the Broke GMS fantasy football league. The league's seeding is based
+off the highest scoring teams per week. Highest scoring team gets 11 points, next highest gets 10 points, and so on. Winners of their head to head matchups get rewarded with $25.
+
+# How to run
+- Install node
+- run `node index.js --week <week number>`

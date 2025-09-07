@@ -6,7 +6,7 @@ import Yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
 const argv = Yargs(hideBin(process.argv)).parse()
-const LEAGUE_ID = "1124850847474282496";
+const LEAGUE_ID = "1257462540309377024";
 
 async function main(week) {
     const currWeek = week;

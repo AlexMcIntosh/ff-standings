@@ -3,16 +3,19 @@ import { fileURLToPath } from 'url'
 import sharp from "sharp";
 import { generateSVG } from './utils.js';
 
+const year = new Date().getFullYear();
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const TEMPLATE_PATH = path.join(
     __dirname,
-    './template.png'
+    `./templates/template-${year}.png`
 );
 
 export const generateStandingsPng = async (standings, week) => {
     const template = await sharp(TEMPLATE_PATH);
     const overlays = [];
+    const PIXELS_PER_TEAM = 105;
+    const TEAM_HEIGHT = 605;
 
     console.log("picture loaded");
     standings.forEach((roster, index) => {
@@ -21,9 +24,10 @@ export const generateStandingsPng = async (standings, week) => {
         const lossesSvg = generateSVG(roster.losses.toString());
         const payoutSvg = generateSVG(roster.payout.toString());
         const pointsSvg = generateSVG(roster.points.toString());
-        const weekSvg = generateSVG(week.toString(), 120);
+        const weekSvg = generateSVG(week.toString(), 100);
 
-        const y = 587 + 102 * index;
+        // these numbers just work
+        const y = TEAM_HEIGHT + (PIXELS_PER_TEAM * index);
 
         const nameOverlay = {
             input: nameSvg,
@@ -46,7 +50,7 @@ export const generateStandingsPng = async (standings, week) => {
         const payoutOverlay = {
             input: payoutSvg,
             top: y,
-            left: 813,
+            left: 825,
         };
 
         const pointsOverlay = {
@@ -57,8 +61,8 @@ export const generateStandingsPng = async (standings, week) => {
 
         const weekOverlay = {
             input: weekSvg,
-            top: 215,
-            left: 905
+            top: 270,
+            left: 350
         }
 
         overlays.push(nameOverlay);
@@ -71,5 +75,5 @@ export const generateStandingsPng = async (standings, week) => {
 
     await template.composite([
         ...overlays
-    ]).toFile(`output/standings-week-${week}.png`);
+    ]).toFile(`output/${year}/standings-week-${week}.png`);
 }
